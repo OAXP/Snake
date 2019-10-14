@@ -56,7 +56,7 @@ public class Snake extends Application {
                 isChanged = true;
                 try {
                     move(Direction.DOWN);
-                } catch (InterruptedException ex) {
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
                 GridPane.setRowIndex(rectangle, GridPane.getRowIndex(rectangle) + 1);
@@ -65,7 +65,7 @@ public class Snake extends Application {
                 isChanged = true;
                 try {
                     move(Direction.UP);
-                } catch (InterruptedException ex) {
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
                 GridPane.setRowIndex(rectangle, GridPane.getRowIndex(rectangle) - 1);
@@ -74,7 +74,7 @@ public class Snake extends Application {
                 isChanged = true;
                 try {
                     move(Direction.RIGHT);
-                } catch (InterruptedException ex) {
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
                 GridPane.setColumnIndex(rectangle, GridPane.getColumnIndex(rectangle) + 1);
@@ -83,7 +83,7 @@ public class Snake extends Application {
                 isChanged = true;
                 try {
                     move(Direction.LEFT);
-                } catch (InterruptedException ex) {
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
                 GridPane.setColumnIndex(rectangle, GridPane.getColumnIndex(rectangle) - 1);
@@ -92,20 +92,18 @@ public class Snake extends Application {
 
     }
 
-    private void move(Direction HeadDirect) throws InterruptedException {
+    private void move(Direction HeadDirect) throws Exception {
         switch(HeadDirect){
             case UP:
                 isChanged = false;
                 while(!isChanged){
                     GridPane.setRowIndex(rectangle, GridPane.getRowIndex(rectangle) - 1);
-                    TimeUnit.MILLISECONDS.sleep(100);
                 }
                 break;
             case DOWN:
                 isChanged = false;
                 while(!isChanged){
                     GridPane.setRowIndex(rectangle, GridPane.getRowIndex(rectangle) + 1);
-                    TimeUnit.MILLISECONDS.sleep(100);
                 }
                 break;
         }
