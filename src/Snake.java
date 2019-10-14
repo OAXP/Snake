@@ -9,6 +9,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 
 public class Snake extends Application {
@@ -41,7 +42,7 @@ public class Snake extends Application {
     public void start(Stage stage) throws Exception {
 
         Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
-        stage.setTitle("Hello Anas");
+        stage.setTitle("Snake");
         Scene scene = new Scene(root, 400, 400);
         stage.setScene(scene);
         stage.show();
@@ -53,44 +54,62 @@ public class Snake extends Application {
         scene.setOnKeyPressed(e -> {
             if(e.getCode() == KeyCode.S || e.getCode() == KeyCode.DOWN){
                 isChanged = true;
-//                move(Direction.DOWN);
+                try {
+                    move(Direction.DOWN);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
                 GridPane.setRowIndex(rectangle, GridPane.getRowIndex(rectangle) + 1);
             }
             else if(e.getCode() == KeyCode.W || e.getCode() == KeyCode.UP){
                 isChanged = true;
-//                move(Direction.UP);
+                try {
+                    move(Direction.UP);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
                 GridPane.setRowIndex(rectangle, GridPane.getRowIndex(rectangle) - 1);
             }
             else if(e.getCode() == KeyCode.D || e.getCode() == KeyCode.RIGHT){
                 isChanged = true;
-//                move(Direction.RIGHT);
+                try {
+                    move(Direction.RIGHT);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
                 GridPane.setColumnIndex(rectangle, GridPane.getColumnIndex(rectangle) + 1);
             }
             else if(e.getCode() == KeyCode.A || e.getCode() == KeyCode.LEFT){
                 isChanged = true;
-//                move(Direction.LEFT);
+                try {
+                    move(Direction.LEFT);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
                 GridPane.setColumnIndex(rectangle, GridPane.getColumnIndex(rectangle) - 1);
             }
         });
 
     }
 
-    /*private void move(Direction HeadDirect) {
+    private void move(Direction HeadDirect) throws InterruptedException {
         switch(HeadDirect){
             case UP:
                 isChanged = false;
                 while(!isChanged){
                     GridPane.setRowIndex(rectangle, GridPane.getRowIndex(rectangle) - 1);
+                    TimeUnit.MILLISECONDS.sleep(100);
                 }
                 break;
             case DOWN:
                 isChanged = false;
                 while(!isChanged){
                     GridPane.setRowIndex(rectangle, GridPane.getRowIndex(rectangle) + 1);
+                    TimeUnit.MILLISECONDS.sleep(100);
                 }
                 break;
         }
-    }*/
+    }
 
     @Override
     public void stop() throws Exception {
