@@ -10,13 +10,12 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 
 public class Snake extends Application {
 
     private Random rand = new Random();
-    private Rectangle rectangle = new Rectangle();
+    private Rectangle head = new Rectangle();
     private Rectangle food = new Rectangle();
 
     enum Direction {
@@ -32,9 +31,9 @@ public class Snake extends Application {
     @Override
     public void init() throws Exception {
         System.out.println("Before beginning");
-        rectangle.setHeight(10);
-        rectangle.setWidth(10);
-        rectangle.setFill(Color.GREEN);
+        head.setHeight(10);
+        head.setWidth(10);
+        head.setFill(Color.GREEN);
         food.setHeight(10);
         food.setWidth(10);
         food.setFill(Color.RED);
@@ -52,9 +51,9 @@ public class Snake extends Application {
         stage.show();
 
         GridPane grid = (GridPane) scene.lookup("#grid");
-        GridPane.setRowIndex(rectangle, 0);
-        GridPane.setColumnIndex(rectangle, 1);
-        grid.getChildren().addAll(rectangle, food);
+        GridPane.setRowIndex(head, 0);
+        GridPane.setColumnIndex(head, 1);
+        grid.getChildren().addAll(head, food);
 
         Thread mainThread = new Thread(move);
         mainThread.start();
@@ -67,7 +66,7 @@ public class Snake extends Application {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                GridPane.setRowIndex(rectangle, GridPane.getRowIndex(rectangle) + 1);
+                GridPane.setRowIndex(head, GridPane.getRowIndex(head) + 1);
             } else if (e.getCode() == KeyCode.W || e.getCode() == KeyCode.UP) {
                 isChanged = true;
                 try {
@@ -75,7 +74,7 @@ public class Snake extends Application {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                GridPane.setRowIndex(rectangle, GridPane.getRowIndex(rectangle) - 1);
+                GridPane.setRowIndex(head, GridPane.getRowIndex(head) - 1);
             } else if (e.getCode() == KeyCode.D || e.getCode() == KeyCode.RIGHT) {
                 isChanged = true;
                 try {
@@ -83,7 +82,7 @@ public class Snake extends Application {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                GridPane.setColumnIndex(rectangle, GridPane.getColumnIndex(rectangle) + 1);
+                GridPane.setColumnIndex(head, GridPane.getColumnIndex(head) + 1);
             } else if (e.getCode() == KeyCode.A || e.getCode() == KeyCode.LEFT) {
                 isChanged = true;
                 try {
@@ -91,7 +90,7 @@ public class Snake extends Application {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                GridPane.setColumnIndex(rectangle, GridPane.getColumnIndex(rectangle) - 1);
+                GridPane.setColumnIndex(head, GridPane.getColumnIndex(head) - 1);
             }
         });
 
@@ -105,34 +104,52 @@ public class Snake extends Application {
                     case UP:
                         isChanged = false;
                         while (!isChanged) {
-                            GridPane.setRowIndex(rectangle, GridPane.getRowIndex(rectangle) - 1);
+                            GridPane.setRowIndex(head, GridPane.getRowIndex(head) - 1);
                             Thread.sleep(100);
+                            if((GridPane.getRowIndex(head).equals(GridPane.getRowIndex(food))) && (GridPane.getColumnIndex(head).equals(GridPane.getColumnIndex(food)))){
+                                eat();
+                            }
                         }
                         break;
                     case RIGHT:
                         isChanged = false;
                         while (!isChanged) {
-                            GridPane.setColumnIndex(rectangle, GridPane.getColumnIndex(rectangle) + 1);
+                            GridPane.setColumnIndex(head, GridPane.getColumnIndex(head) + 1);
                             Thread.sleep(100);
+                            if((GridPane.getRowIndex(head).equals(GridPane.getRowIndex(food))) && (GridPane.getColumnIndex(head).equals(GridPane.getColumnIndex(food)))){
+                                eat();
+                            }
                         }
                         break;
                     case LEFT:
                         isChanged = false;
                         while (!isChanged) {
-                            GridPane.setColumnIndex(rectangle, GridPane.getColumnIndex(rectangle) - 1);
+                            GridPane.setColumnIndex(head, GridPane.getColumnIndex(head) - 1);
                             Thread.sleep(100);
+                            if((GridPane.getRowIndex(head).equals(GridPane.getRowIndex(food))) && (GridPane.getColumnIndex(head).equals(GridPane.getColumnIndex(food)))){
+                                eat();
+                            }
                         }
                         break;
                     default:
                         isChanged = false;
                         while (!isChanged) {
-                            GridPane.setRowIndex(rectangle, GridPane.getRowIndex(rectangle) + 1);
+                            GridPane.setRowIndex(head, GridPane.getRowIndex(head) + 1);
                             Thread.sleep(100);
+                            if((GridPane.getRowIndex(head).equals(GridPane.getRowIndex(food))) && (GridPane.getColumnIndex(head).equals(GridPane.getColumnIndex(food)))){
+                                eat();
+                            }
                         }
                 }
             }
         }
     };
+    
+    private void eat(){
+        GridPane.setRowIndex(food, rand.nextInt(40));
+        GridPane.setColumnIndex(food, rand.nextInt(40));
+        // TODO grow la queue
+    }
 
     @Override
     public void stop() throws Exception {
