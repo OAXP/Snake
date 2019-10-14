@@ -112,6 +112,20 @@ public class Snake extends Application {
                             Thread.sleep(100);
                         }
                         break;
+                    case RIGHT:
+                        isChanged = false;
+                        while(!isChanged){
+                            GridPane.setColumnIndex(rectangle, GridPane.getColumnIndex(rectangle) + 1);
+                            Thread.sleep(100);
+                        }
+                        break;
+                    case LEFT:
+                        isChanged = false;
+                        while(!isChanged){
+                            GridPane.setColumnIndex(rectangle, GridPane.getColumnIndex(rectangle) - 1);
+                            Thread.sleep(100);
+                        }
+                        break;
                 }
                 return null;
             }
