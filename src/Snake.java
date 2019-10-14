@@ -18,13 +18,16 @@ public class Snake extends Application {
     private Random rand = new Random();
     private Rectangle rectangle = new Rectangle();
     private Rectangle food = new Rectangle();
+
     enum Direction {
         UP,
         RIGHT,
         DOWN,
         LEFT
     }
+
     private boolean isChanged;
+    private Direction HeadDirect = Direction.DOWN;
 
     @Override
     public void init() throws Exception {
@@ -52,38 +55,39 @@ public class Snake extends Application {
         GridPane.setRowIndex(rectangle, 0);
         GridPane.setColumnIndex(rectangle, 1);
         grid.getChildren().addAll(rectangle, food);
+
+        Thread mainThread = new Thread(move);
+        mainThread.start();
+
         scene.setOnKeyPressed(e -> {
-            if(e.getCode() == KeyCode.S || e.getCode() == KeyCode.DOWN){
+            if (e.getCode() == KeyCode.S || e.getCode() == KeyCode.DOWN) {
                 isChanged = true;
                 try {
-                    move(Direction.DOWN);
+                    HeadDirect = Direction.DOWN;
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
                 GridPane.setRowIndex(rectangle, GridPane.getRowIndex(rectangle) + 1);
-            }
-            else if(e.getCode() == KeyCode.W || e.getCode() == KeyCode.UP){
+            } else if (e.getCode() == KeyCode.W || e.getCode() == KeyCode.UP) {
                 isChanged = true;
                 try {
-                    move(Direction.UP);
+                    HeadDirect = Direction.UP;
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
                 GridPane.setRowIndex(rectangle, GridPane.getRowIndex(rectangle) - 1);
-            }
-            else if(e.getCode() == KeyCode.D || e.getCode() == KeyCode.RIGHT){
+            } else if (e.getCode() == KeyCode.D || e.getCode() == KeyCode.RIGHT) {
                 isChanged = true;
                 try {
-                    move(Direction.RIGHT);
+                    HeadDirect = Direction.RIGHT;
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
                 GridPane.setColumnIndex(rectangle, GridPane.getColumnIndex(rectangle) + 1);
-            }
-            else if(e.getCode() == KeyCode.A || e.getCode() == KeyCode.LEFT){
+            } else if (e.getCode() == KeyCode.A || e.getCode() == KeyCode.LEFT) {
                 isChanged = true;
                 try {
-                    move(Direction.LEFT);
+                    HeadDirect = Direction.LEFT;
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -93,46 +97,42 @@ public class Snake extends Application {
 
     }
 
-    private void move(Direction HeadDirect) throws Exception {
-        Task<Void> move = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                switch(HeadDirect){
+    private Task<Void> move = new Task<Void>() {
+        @Override
+        protected Void call() throws Exception {
+            while (true) {
+                switch (HeadDirect) {
                     case UP:
                         isChanged = false;
-                        while(!isChanged){
+                        while (!isChanged) {
                             GridPane.setRowIndex(rectangle, GridPane.getRowIndex(rectangle) - 1);
-                            Thread.sleep(100);
-                        }
-                        break;
-                    case DOWN:
-                        isChanged = false;
-                        while(!isChanged){
-                            GridPane.setRowIndex(rectangle, GridPane.getRowIndex(rectangle) + 1);
                             Thread.sleep(100);
                         }
                         break;
                     case RIGHT:
                         isChanged = false;
-                        while(!isChanged){
+                        while (!isChanged) {
                             GridPane.setColumnIndex(rectangle, GridPane.getColumnIndex(rectangle) + 1);
                             Thread.sleep(100);
                         }
                         break;
                     case LEFT:
                         isChanged = false;
-                        while(!isChanged){
+                        while (!isChanged) {
                             GridPane.setColumnIndex(rectangle, GridPane.getColumnIndex(rectangle) - 1);
                             Thread.sleep(100);
                         }
                         break;
+                    default:
+                        isChanged = false;
+                        while (!isChanged) {
+                            GridPane.setRowIndex(rectangle, GridPane.getRowIndex(rectangle) + 1);
+                            Thread.sleep(100);
+                        }
                 }
-                return null;
             }
-        };
-        new Thread(move).start();
-
-    }
+        }
+    };
 
     @Override
     public void stop() throws Exception {
