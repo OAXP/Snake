@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -93,20 +94,30 @@ public class Snake extends Application {
     }
 
     private void move(Direction HeadDirect) throws Exception {
-        switch(HeadDirect){
-            case UP:
-                isChanged = false;
-                while(!isChanged){
-                    GridPane.setRowIndex(rectangle, GridPane.getRowIndex(rectangle) - 1);
+        Task<Void> move = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                switch(HeadDirect){
+                    case UP:
+                        isChanged = false;
+                        while(!isChanged){
+                            GridPane.setRowIndex(rectangle, GridPane.getRowIndex(rectangle) - 1);
+                            Thread.sleep(100);
+                        }
+                        break;
+                    case DOWN:
+                        isChanged = false;
+                        while(!isChanged){
+                            GridPane.setRowIndex(rectangle, GridPane.getRowIndex(rectangle) + 1);
+                            Thread.sleep(100);
+                        }
+                        break;
                 }
-                break;
-            case DOWN:
-                isChanged = false;
-                while(!isChanged){
-                    GridPane.setRowIndex(rectangle, GridPane.getRowIndex(rectangle) + 1);
-                }
-                break;
-        }
+                return null;
+            }
+        };
+        new Thread(move).start();
+
     }
 
     @Override
