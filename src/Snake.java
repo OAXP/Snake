@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class Snake extends Application {
 
-    Random rand = new Random();
+    private Random rand = new Random();
     private Rectangle rectangle = new Rectangle();
     private Rectangle food = new Rectangle();
     enum Direction {
