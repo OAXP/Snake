@@ -55,7 +55,6 @@ public class Snake extends Application {
         GridPane.setColumnIndex(head, 1);
         grid.getChildren().addAll(head, food);
 
-        Thread mainThread = new Thread(move);
         mainThread.start();
 
         scene.setOnKeyPressed(e -> {
@@ -144,6 +143,8 @@ public class Snake extends Application {
             }
         }
     };
+
+    private Thread mainThread = new Thread(move);
     
     private void eat(){
         GridPane.setRowIndex(food, rand.nextInt(40));
@@ -154,6 +155,7 @@ public class Snake extends Application {
     @Override
     public void stop() throws Exception {
         System.out.println("After");
+        mainThread.interrupt();
         super.stop();
     }
 }
